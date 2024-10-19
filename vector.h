@@ -1062,8 +1062,6 @@ inline vector<T, Alloc>::const_iterator vector<T, Alloc>::erase(const_iterator f
 
     // +++++++++++++++++++ MEMBER FUNCTIONS +++++++++++++++++++
 
-    // copy-assignment
-
 template<typename T, typename Alloc> 
 inline vector<T, Alloc>& vector<T, Alloc>::operator=(const vector& other) {
     Alloc newalloc = alloc_traits::propagate_on_container_copy_assignment::value ?
