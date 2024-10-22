@@ -1062,6 +1062,7 @@ inline vector<T, Alloc>::const_iterator vector<T, Alloc>::erase(const_iterator f
 
     // +++++++++++++++++++ MEMBER FUNCTIONS +++++++++++++++++++
 
+// copy assignment
 template<typename T, typename Alloc> 
 inline vector<T, Alloc>& vector<T, Alloc>::operator=(const vector& other) {
     Alloc newalloc = alloc_traits::propagate_on_container_copy_assignment::value ?
@@ -1095,14 +1096,18 @@ inline vector<T, Alloc>& vector<T, Alloc>::operator=(const vector& other) {
     return *this;
 }
 
+// move assignment
 template<typename T, typename Alloc> 
 inline vector<T, Alloc>& vector<T, Alloc>::operator=(vector&& other) noexcept {
     if (this == &other) return *this;
 
-    if (arr_ != nullptr)alloc_traits::deallocate(arr_, cap_);
+    if (arr_ != nullptr)alloc_traits::deallocate(alloc_, arr_, cap_);
+    Alloc newalloc = alloc_traits::propagate_on_container_move_assignment::value ?
+        other.alloc_ : alloc_;
+    alloc_ = newalloc;
     arr_ = other.arr_; other.arr_ = nullptr;
     sz_ = other.sz_;   other.sz_ = 0;
-    cap_ = other.cap_; other.cap_ = 0;
+    cap_ = other.cap_; 
 
     return *this;
 }
